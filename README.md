@@ -17,20 +17,44 @@ Your laptop runs a lightweight Python server. Your phone connects to it via WiFi
 
 - **Python** 3.8+ installed on your laptop
 
-### 2. Install Dependencies & Run
+### 2. First-Time Setup
 
 ```bash
 cd server
 pip install -r requirements.txt
+```
+
+### 3. Start the Server
+
+**Option A — Double-click** `Start Touchpad.bat` in the project folder. That's it!
+
+**Option B — Terminal:**
+```bash
+cd server
 python server.py
 ```
 
-### 3. Connect Your Phone
+### 4. Connect Your Phone
 
 1. Make sure your phone and laptop are on the **same WiFi network**
-2. The server will display a **QR code** in the terminal — scan it with your phone camera
-3. Or manually open the URL shown (e.g., `http://192.168.1.x:8766`) in your phone's browser
-4. Start using your phone as a touchpad! 🎉
+2. Scan the QR code shown in terminal, or open the URL (e.g., `http://192.168.1.x:8766`)
+3. Start using your phone as a touchpad!
+
+## Auto-Start on Windows Boot
+
+A shortcut has been added to your Windows Startup folder. The server will **auto-start in the background** every time Windows boots.
+
+To manage this:
+- **Disable auto-start**: Press `Win+R` → type `shell:startup` → delete the "Touchpad Server" shortcut
+- **Re-enable**: Run this in the project folder: `Start Touchpad (Silent).bat`, or re-create the shortcut
+
+## Touchpad Not Working? Emergency Use
+
+If your laptop's physical touchpad breaks or stops responding:
+1. Use **keyboard** to press `Win+R`, type `cmd`, press Enter
+2. Type: `cd "c:\Users\Hp\Downloads\Shri\Projects\Touchpad app\server"` and press Enter
+3. Type: `python server.py` and press Enter
+4. Open the URL on your phone — you now have a working touchpad!
 
 ## Features
 

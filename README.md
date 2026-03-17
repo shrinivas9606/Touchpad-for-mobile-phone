@@ -26,7 +26,10 @@ pip install -r requirements.txt
 
 ### 3. Start the Server
 
-**Option A — Double-click** `Start Touchpad.bat` in the project folder. That's it!
+**Option A — Desktop Shortcut (Recommended)**
+1. Right-click `Desktop Launcher.bat` inside the project folder.
+2. Select **Send to > Desktop (create shortcut)**.
+3. Now you can just double-click that shortcut on your desktop anytime!
 
 **Option B — Terminal:**
 ```bash

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0a0e17">
+  <title>Touchpad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ── Status Bar ───────────────────────── -->
+  <header id="status-bar">
+    <div class="status-left">
+      <div id="connection-dot" class="dot disconnected"></div>
+      <span id="connection-text">Connecting...</span>
+    </div>
+    <div class="status-center">
+      <span id="mode-label">TOUCHPAD</span>
+    </div>
+    <div class="status-right">
+      <button id="settings-btn" class="icon-btn" aria-label="Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Portrait: Touchpad Mode ──────────── -->
+  <main id="touchpad-mode">
+    <div id="touchpad" class="touchpad-surface">
+      <div class="touchpad-grid"></div>
+      <div id="gesture-indicator" class="gesture-indicator hidden">
+        <span id="gesture-text"></span>
+      </div>
+    </div>
+    <div id="mouse-buttons">
+      <button id="btn-left" class="mouse-btn left" aria-label="Left Click">
+        <div class="btn-shine"></div>
+      </button>
+      <div class="btn-divider"></div>
+      <button id="btn-right" class="mouse-btn right" aria-label="Right Click">
+        <div class="btn-shine"></div>
+      </button>
+    </div>
+  </main>
+
+  <!-- ── Landscape: Keyboard / Media Mode ── -->
+  <main id="keyboard-mode" class="hidden">
+    <div class="kb-section">
+      <h3 class="kb-section-title">Media</h3>
+      <div class="kb-row">
+        <button class="kb-btn" data-key="audio_prev">⏮</button>
+        <button class="kb-btn large" data-key="audio_play">⏯</button>
+        <button class="kb-btn" data-key="audio_next">⏭</button>
+        <button class="kb-btn" data-key="audio_mute">🔇</button>
+        <button class="kb-btn" data-key="audio_vol_down">🔉</button>
+        <button class="kb-btn" data-key="audio_vol_up">🔊</button>
+      </div>
+    </div>
+    <div class="kb-section">
+      <h3 class="kb-section-title">Shortcuts</h3>
+      <div class="kb-row">
+        <button class="kb-btn wide" data-key="tab" data-mod="alt">Alt+Tab</button>
+        <button class="kb-btn wide" data-key="d" data-mod="command">Win+D</button>
+        <button class="kb-btn wide" data-key="l" data-mod="command">Win+L</button>
+        <button class="kb-btn wide" data-key="e" data-mod="command">Win+E</button>
+      </div>
+      <div class="kb-row">
+        <button class="kb-btn wide" data-key="c" data-mod="control">Ctrl+C</button>
+        <button class="kb-btn wide" data-key="v" data-mod="control">Ctrl+V</button>
+        <button class="kb-btn wide" data-key="z" data-mod="control">Ctrl+Z</button>
+        <button class="kb-btn wide" data-key="a" data-mod="control">Ctrl+A</button>
+      </div>
+    </div>
+    <div class="kb-section">
+      <h3 class="kb-section-title">Navigation</h3>
+      <div class="kb-row">
+        <button class="kb-btn" data-key="escape">Esc</button>
+        <button class="kb-btn" data-key="delete">Del</button>
+        <button class="kb-btn" data-key="enter">Enter</button>
+        <button class="kb-btn" data-key="space">Space</button>
+        <button class="kb-btn" data-key="backspace">⌫</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Settings Panel ───────────────────── -->
+  <div id="settings-panel" class="settings-panel hidden">
+    <div class="settings-overlay" id="settings-overlay"></div>
+    <div class="settings-content">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="settings-close" class="icon-btn" aria-label="Close Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="settings-body">
+        <div class="setting-item">
+          <label for="sensitivity-slider">Cursor Sensitivity</label>
+          <div class="slider-wrap">
+            <input type="range" id="sensitivity-slider" min="0.5" max="4" step="0.1" value="1.5">
+            <span id="sensitivity-value">1.5x</span>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label for="scroll-speed-slider">Scroll Speed</label>
+          <div class="slider-wrap">
+            <input type="range" id="scroll-speed-slider" min="0.5" max="10" step="0.5" value="2.5">
+            <span id="scroll-speed-value">1.0x</span>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label for="haptic-toggle">Haptic Feedback</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="haptic-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label class="setting-label">Connection Info</label>
+          <span id="connection-info" class="setting-info">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Ripple Container ─────────────────── -->
+  <div id="ripple-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

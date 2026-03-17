@@ -1,0 +1,569 @@
+/* ═══════════════════════════════════════════════
+   TOUCHPAD APP — PREMIUM DARK THEME
+   ═══════════════════════════════════════════════ */
+
+/* ── Design Tokens ──────────────────────────── */
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1a2035;
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass-hover: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(99, 102, 241, 0.4);
+
+  --text-primary: #e5e7eb;
+  --text-secondary: #6b7280;
+  --text-muted: #4b5563;
+
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --accent-soft: rgba(99, 102, 241, 0.1);
+
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.3);
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+  --transition-fast: 120ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Reset ──────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Status Bar ─────────────────────────────── */
+#status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+  flex-shrink: 0;
+  z-index: 10;
+  min-height: 44px;
+}
+
+.status-left,
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+}
+
+.status-right {
+  justify-content: flex-end;
+}
+
+.status-center {
+  text-align: center;
+}
+
+#mode-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+}
+
+/* Connection Dot */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot.connected {
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success-glow);
+  animation: pulse-dot 2s infinite;
+}
+
+.dot.disconnected {
+  background: var(--danger);
+  animation: pulse-dot 1s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+#connection-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.icon-btn:active {
+  background: var(--bg-glass-hover);
+  color: var(--text-primary);
+  transform: scale(0.92);
+}
+
+/* ── Touchpad Surface ───────────────────────── */
+#touchpad-mode {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.touchpad-surface {
+  flex: 1;
+  position: relative;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-glass);
+  overflow: hidden;
+  cursor: none;
+}
+
+/* Subtle grid pattern */
+.touchpad-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  pointer-events: none;
+}
+
+/* Gesture Indicator */
+.gesture-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 12px 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: 5;
+}
+
+.gesture-indicator.visible {
+  opacity: 1;
+}
+
+#gesture-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-light);
+  letter-spacing: 1px;
+}
+
+/* ── Mouse Buttons ──────────────────────────── */
+#mouse-buttons {
+  display: flex;
+  height: 70px;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-glass);
+}
+
+.mouse-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition-fast);
+}
+
+.mouse-btn:active {
+  background: var(--accent-soft);
+}
+
+.mouse-btn .btn-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn-divider {
+  width: 1px;
+  background: var(--border-glass);
+  align-self: stretch;
+  margin: 12px 0;
+}
+
+/* ── Keyboard / Media Mode ──────────────────── */
+#keyboard-mode {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 16px;
+  overflow-y: auto;
+}
+
+.kb-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.kb-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kb-btn {
+  flex: 1;
+  min-width: 48px;
+  height: 48px;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kb-btn.wide {
+  min-width: 80px;
+  font-size: 12px;
+}
+
+.kb-btn.large {
+  flex: 1.5;
+}
+
+.kb-btn:active {
+  background: var(--accent-soft);
+  border-color: var(--border-active);
+  transform: scale(0.94);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ── Settings Panel ─────────────────────────── */
+.settings-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.settings-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.settings-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.settings-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.setting-item label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  max-width: 200px;
+}
+
+.slider-wrap input[type="range"] {
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  outline: none;
+}
+
+.slider-wrap input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  cursor: pointer;
+}
+
+.slider-wrap span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-light);
+  min-width: 35px;
+  text-align: right;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  border-radius: 13px;
+  transition: var(--transition-normal);
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  transition: var(--transition-normal);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(22px);
+  background: white;
+}
+
+.setting-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ── Ripple Effect ──────────────────────────── */
+#ripple-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.ripple {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-out 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-out {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+/* ── Scroll Indicator ───────────────────────── */
+.scroll-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 50px;
+  border: 2px solid var(--accent-light);
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.scroll-indicator.visible {
+  opacity: 0.6;
+}
+
+.scroll-indicator::after {
+  content: '';
+  width: 4px;
+  height: 10px;
+  background: var(--accent-light);
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scroll-tick 1.5s ease infinite;
+}
+
+@keyframes scroll-tick {
+  0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+}
+
+/* ── Touch Active State ─────────────────────── */
+.touchpad-surface.touching {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, #151d30 100%);
+}
+
+/* ── Orientation Handling ───────────────────── */
+@media (orientation: landscape) {
+  #status-bar {
+    padding: 4px 16px;
+    min-height: 36px;
+  }
+
+  #mouse-buttons {
+    height: 50px;
+  }
+
+  .kb-btn {
+    height: 42px;
+  }
+}
+
+/* ── Micro-animations ───────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
